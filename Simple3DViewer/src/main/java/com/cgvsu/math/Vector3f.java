@@ -1,18 +1,48 @@
 package com.cgvsu.math;
 
-// Это заготовка для собственной библиотеки для работы с линейной алгеброй
-public class Vector3f {
+import com.cgvsu.math.base.AbstractVector;
+
+public class Vector3f extends AbstractVector<Vector3f> {
+    
     public Vector3f(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        super(new float[]{x, y, z});
     }
 
-    public boolean equals(Vector3f other) {
-        // todo: желательно, чтобы это была глобальная константа
-        final float eps = 1e-7f;
-        return Math.abs(x - other.x) < eps && Math.abs(y - other.y) < eps && Math.abs(z - other.z) < eps;
+    @Override
+    protected Vector3f createNew(float[] components) {
+        return new Vector3f(components[0], components[1], components[2]);
     }
 
-    public float x, y, z;
+    public float getX() {
+        return components[0];
+    }
+
+    public float getY() {
+        return components[1];
+    }
+
+    public float getZ() {
+        return components[2];
+    }
+
+    public Vector3f cross(Vector3f other) {
+        return new Vector3f(
+                components[1] * other.components[2] - components[2] * other.components[1],
+                components[2] * other.components[0] - components[0] * other.components[2],
+                components[0] * other.components[1] - components[1] * other.components[0]
+        );
+    }
+
+    public float distance(Vector3f other) {
+        float dx = components[0] - other.components[0];
+        float dy = components[1] - other.components[1];
+        float dz = components[2] - other.components[2];
+        return (float) Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Vector3f(%.2f, %.2f, %.2f)", 
+                components[0], components[1], components[2]);
+    }
 }
